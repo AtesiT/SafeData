@@ -19,11 +19,16 @@ struct ContentView: View {
         HStack {
             Image(systemName: "lock.fill")
                 .foregroundStyle(Color.gray)
-            TextField("Введите пароль", text: $inputUsername)
+            TextField("Введите пароль", text: $inputPassword)
                 .textFieldStyle(.roundedBorder)
 
         }
         .padding(.horizontal, 64)
+        
+        Button("Войти") {
+            print("Отладка: \(inputUsername) \(inputPassword)")
+        }
+        .padding(8)
     }
 }
 
