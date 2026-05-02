@@ -49,6 +49,9 @@ struct ContentView: View {
                     }
                     .padding(.horizontal, 64)
                     
+                    //  Кнопки
+                    
+                    //  Первая кнопка
                     Button("Войти") {
                         signIn()
                     }
@@ -58,6 +61,18 @@ struct ContentView: View {
                     } message: {
                         Text("Вы ввели неправильные данные")
                     }
+                    
+                    //  Вторая кнопка
+                    Button("Регистрация") {
+                        signUp()
+                    }
+                    .disabled(inputUsername.isEmpty || inputPassword.isEmpty)
+                    .alert("Ошибка", isPresented: $showAlert) {
+                        Button("OK", role: .cancel) {}
+                    } message: {
+                        Text("Пользователь с таким именем уже существует")
+                    }
+                    
                 }
                 .padding(8)
                 //  Добавляем переход на второй экран
@@ -111,8 +126,40 @@ extension ContentView {
             inputPassword = ""
         }
     }
+    //  Для регистрации пользователя
+    private func signUp() {
+        let correctUsername = inputUsername.trimmingCharacters(in: .whitespaces)
+        let correctPassword = inputPassword.trimmingCharacters(in: .whitespaces)
+        
+        let request = NSFetchRequest<User>(entityName: "User")
+        
+        request.predicate = NSPredicate(format: "name == %@ OR surname == %@", inputUsername, inputPassword)
+        
+        let result = (try? viewContext.fetch(request)) ?? []
+        
+        if result.isEmpty {
+            //  Создание пользователя для базы данных и присваивание данных
+            let newUser = User(context: viewContext)
+            newUser.id = UUID()
+            newUser.name = correctUsername
+            newUser.surname = correctPassword
+            
+            //  Сохранение пользователя в базе данных
+            try? viewContext.save()
+            
+            backgroundColor = .yellow
+            showSecondView = true
+        } else {
+            showAlert = true
+        }
+    }
 }
+
+
+//  MARK: - PREVIEW
 
 #Preview {
     ContentView()
+        //  Передаём данные из БД
+        .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
 }
