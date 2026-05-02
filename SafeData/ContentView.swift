@@ -3,7 +3,9 @@ import SwiftUI
 struct ContentView: View {
     //  Переключатель для того, чтобы перейти на второй экран
     @State private var showSecondView: Bool = false
-    
+    //  Переключатель для показа alert
+    @State private var showAlert: Bool = false
+    //  Данные пользователей
     @State private var inputUsername: String = ""
     @State private var inputPassword: String = ""
     
@@ -35,6 +37,11 @@ struct ContentView: View {
                 Button("Войти") {
                     signIn()
                 }
+                .alert("Ошибка", isPresented: $showAlert) {
+                    Button("OK", role: .cancel) {}
+                } message: {
+                    Text("Вы ввели неправильные данные")
+                }
             }
             .padding(8)
             //  Добавляем переход на второй экран
@@ -50,6 +57,8 @@ extension ContentView {
     private func signIn() {
         if (inputUsername == "user") && (inputPassword == "password") {
             showSecondView = true
+        } else {
+            showAlert = true
         }
     }
 }
