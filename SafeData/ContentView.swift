@@ -1,6 +1,11 @@
 import SwiftUI
+import CoreData
+
+//  MARK: - VALUABLES
 
 struct ContentView: View {
+    //  Создаём свойство для того, чтобы получить доступ к базе данным
+    @Environment(\.managedObjectContext) private var viewContext
     //  Переключатель для того, чтобы перейти на второй экран
     @State private var showSecondView: Bool = false
     //  Переключатель для показа alert
@@ -10,6 +15,8 @@ struct ContentView: View {
     //  Данные пользователей
     @State private var inputUsername: String = ""
     @State private var inputPassword: String = ""
+    
+    //  MARK: - THE VIEW
     
     var body: some View {
         //  Необходим NavigationStack для того, чтобы можно было осуществлять переход
@@ -60,10 +67,24 @@ struct ContentView: View {
     }
 }
 
+//  MARK: - FUNCTIONS
+
 extension ContentView {
     //  Функция для перехода на второй экран
     private func signIn() {
-        if (inputUsername.trimmingCharacters(in: .whitespaces) == userOne.username) && (inputPassword.trimmingCharacters(in: .whitespaces) == userOne.password) {
+        let correctUsername = inputUsername.trimmingCharacters(in: .whitespaces)
+        let correctPassword = inputPassword.trimmingCharacters(in: .whitespaces)
+        
+        //  Запрос к БД для поиска в Entity под названием User
+        let request = NSFetchRequest<User>(entityName: "User")
+        
+        //  Просим БД отфильтровать по условиям
+        request.predicate = NSPredicate(format: "name == %@ AND surname == %@", correctUsername, correctPassword)
+        
+        //  Если данные подходили по условиям, то они хравнятся в request, присваиваем найденное в result
+        let result = (try? viewContext.fetch(request)) ?? []
+        
+        if !result.isEmpty {
             backgroundColor = .green
             showSecondView = true
         } else {
