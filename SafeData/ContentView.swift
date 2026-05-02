@@ -35,7 +35,8 @@ struct ContentView: View {
                             .foregroundStyle(Color.gray)
                         TextField("Введите имя пользователя", text: $inputUsername)
                             .textFieldStyle(.roundedBorder)
-                        
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
                     }
                     .padding(.horizontal, 64)
                     
@@ -51,6 +52,7 @@ struct ContentView: View {
                     Button("Войти") {
                         signIn()
                     }
+                    .disabled(inputUsername.isEmpty || inputPassword.isEmpty)
                     .alert("Ошибка", isPresented: $showAlert) {
                         Button("OK", role: .cancel) {}
                     } message: {
@@ -61,6 +63,22 @@ struct ContentView: View {
                 //  Добавляем переход на второй экран
                 .navigationDestination(isPresented: $showSecondView) {
                     SecondView()
+                }
+            }
+            .onAppear {
+                //  Запрос к БД
+                let request = NSFetchRequest<User>(entityName: "User")
+                
+                //  Быстрее будет узнать число, нежели брать данные
+                if (try? viewContext.count(for: request)) ?? 0 == 0 {
+                    //  Если данных окажется 0, то создаём пользователя с таким именем и фамилией
+                    let user = User(context: viewContext)
+                    user.id = UUID()
+                    user.name = "Tim"
+                    user.surname = "Cook"
+                    
+                    //  Сохраняем в БД
+                    try? viewContext.save()
                 }
             }
         }
