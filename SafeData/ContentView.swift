@@ -84,8 +84,8 @@ struct ContentView: View {
                     //  Если данных окажется 0, то создаём пользователя с таким именем и фамилией
                     let user = User(context: viewContext)
                     user.id = UUID()
-                    user.name = "Tim"
-                    user.surname = "Cook"
+                    user.username = "Tim"
+                    user.password = "Cook"
                     
                     //  Сохраняем в БД
                     try? viewContext.save()
@@ -107,7 +107,7 @@ extension ContentView {
         let request = NSFetchRequest<User>(entityName: "User")
         
         //  Просим БД отфильтровать по условиям
-        request.predicate = NSPredicate(format: "name == %@ AND surname == %@", correctUsername, correctPassword)
+        request.predicate = NSPredicate(format: "username == %@ AND password == %@", correctUsername, correctPassword)
         
         //  Если данные подходили по условиям, то они хравнятся в request, присваиваем найденное в result
         let result = (try? viewContext.fetch(request)) ?? []
@@ -129,7 +129,7 @@ extension ContentView {
         
         let request = NSFetchRequest<User>(entityName: "User")
         
-        request.predicate = NSPredicate(format: "name == %@ OR surname == %@", inputUsername, inputPassword)
+        request.predicate = NSPredicate(format: "username == %@ OR password == %@", inputUsername, inputPassword)
         
         let result = (try? viewContext.fetch(request)) ?? []
         
@@ -137,8 +137,8 @@ extension ContentView {
             //  Создание пользователя для базы данных и присваивание данных
             let newUser = User(context: viewContext)
             newUser.id = UUID()
-            newUser.name = correctUsername
-            newUser.surname = correctPassword
+            newUser.username = correctUsername
+            newUser.password = correctPassword
             
             //  Сохранение пользователя в базе данных
             try? viewContext.save()
