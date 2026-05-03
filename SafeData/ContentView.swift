@@ -8,8 +8,9 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     //  Переключатель для того, чтобы перейти на второй экран
     @State private var showSecondView: Bool = false
-    //  Переключатель для показа alert
+    //  Переключатель для показа alert и сообщение для показа в alert
     @State private var showAlert: Bool = false
+    @State private var showAlertMessage: String = ""
     //  Цвет заднего фона
     @State private var backgroundColor: Color = .clear
     //  Данные пользователей
@@ -56,25 +57,19 @@ struct ContentView: View {
                         signIn()
                     }
                     .disabled(inputUsername.isEmpty || inputPassword.isEmpty)
-                    .alert("Ошибка", isPresented: $showAlert) {
-                        Button("OK", role: .cancel) {}
-                    } message: {
-                        Text("Вы ввели неправильные данные")
-                    }
                     
                     //  Вторая кнопка
                     Button("Регистрация") {
                         signUp()
                     }
                     .disabled(inputUsername.isEmpty || inputPassword.isEmpty)
-                    .alert("Ошибка", isPresented: $showAlert) {
-                        Button("OK", role: .cancel) {}
-                    } message: {
-                        Text("Пользователь с таким именем уже существует")
-                    }
-                    
                 }
                 .padding(8)
+                .alert("Ошибка", isPresented: $showAlert) {
+                    Button("OK", role: .cancel) {}
+                } message: {
+                    Text(showAlertMessage)
+                }
                 //  Добавляем переход на второй экран
                 .navigationDestination(isPresented: $showSecondView) {
                     SecondView()
@@ -122,6 +117,7 @@ extension ContentView {
             showSecondView = true
         } else {
             backgroundColor = .red
+            showAlertMessage = "Вы ввели неправильные данные или такого пользователя не существует"
             showAlert = true
             inputPassword = ""
         }
@@ -148,8 +144,11 @@ extension ContentView {
             try? viewContext.save()
             
             backgroundColor = .yellow
-            showSecondView = true
+            
+            showAlertMessage = "Вы успешно зарегистрированы"
+            showAlert = true
         } else {
+            showAlertMessage = "Такой пользователь уже существует"
             showAlert = true
         }
     }
