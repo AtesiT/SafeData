@@ -1,7 +1,7 @@
 import UIKit
 import SwiftUI
 
-struct UILabelImport: UIViewRepresentable {
+struct UIKitLabel: UIViewRepresentable {
     //  Получение текста из SwiftUI здесь
     var text: String
     
@@ -17,4 +17,8 @@ struct UILabelImport: UIViewRepresentable {
     func updateUIView(_ uiView: UILabel, context: Context) {
         uiView.text = text
     }
+}
+
+#Preview {
+    UIKitLabel(text: "Hello")
 }
