@@ -101,11 +101,11 @@ extension ContentView {
     //  Функция для перехода на второй экран
     private func signIn() {
         let correctUsername = inputUsername.trimmingCharacters(in: .whitespaces)
-        let correctPassword = inputPassword.trimmingCharacters(in: .whitespaces)
+        let correctPassword = hashInfo(inputPassword.trimmingCharacters(in: .whitespaces))
         
         //  Запрос к БД для поиска в Entity под названием User
         let request = NSFetchRequest<User>(entityName: "User")
-        
+        print(correctPassword)
         //  Просим БД отфильтровать по условиям
         request.predicate = NSPredicate(format: "username == %@ AND password == %@", correctUsername, correctPassword)
         
@@ -125,7 +125,7 @@ extension ContentView {
     //  Для регистрации пользователя
     private func signUp() {
         let correctUsername = inputUsername.trimmingCharacters(in: .whitespaces)
-        let correctPassword = inputPassword.trimmingCharacters(in: .whitespaces)
+        let correctPassword = hashInfo(inputPassword.trimmingCharacters(in: .whitespaces))
         
         let request = NSFetchRequest<User>(entityName: "User")
         
