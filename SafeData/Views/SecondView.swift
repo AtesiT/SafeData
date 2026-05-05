@@ -24,14 +24,19 @@ struct SecondView: View {
             LazyVGrid(columns: columns, spacing: 8) {
                 //  Расставляем каждую кнопку с помощью цикла
                 ForEach(buttons, id: \.self) { button in
-                    UIKitButton(text: button, size: 40)
+                    UIKitButton(text: button, size: 40) {
+                        tapOnButton(button)
+                    }
                         //  Делаем кнопки квадратной формы
                         .aspectRatio(1, contentMode: .fit)
                 }
             }
             .padding()
         }
-        
+    }
+    
+    private func tapOnButton(_ theButton: String) {
+        print("The button \"\(theButton)\" was pressed")
     }
 }
 
