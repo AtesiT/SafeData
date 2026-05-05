@@ -5,6 +5,7 @@ struct UIKitButton: UIViewRepresentable {
     //  Текст, который будем передавать кнопке
     var text: String
     var color: UIColor = .systemBlue
+    var size: CGFloat = 14
     var action: (() -> Void)?
     
     
@@ -22,6 +23,7 @@ struct UIKitButton: UIViewRepresentable {
             action: #selector(Coordinator.tap),
             for: .touchUpInside
         )
+        button.titleLabel?.font = UIFont.systemFont(ofSize: size)
         return button
     }
     
