@@ -58,9 +58,51 @@ struct SecondView: View {
         case "C": message = ""
         
         default:
-            //  It will be a equality =
+            message = String(resultOfNumbers(message))
             break
         }
+    }
+    
+    private func resultOfNumbers(_ theString: String) -> Int {
+        //  It will be work if we will make action with two numbers and one action
+        var action = ""
+        var firstNumber = ""
+        var secondNumber = ""
+        var result = 0
+        
+        var atFirst = true
+        
+        for symbol in theString {
+            let strSymbol = String(symbol)
+            
+            switch strSymbol {
+            case "+", "-", "*", "/":
+                action = strSymbol
+                atFirst = false
+            default:
+                if atFirst {
+                    firstNumber += strSymbol
+                } else {
+                    secondNumber += strSymbol
+                }
+            }
+        }
+        
+        
+        switch action {
+        case "+":
+            result = (Int(firstNumber) ?? 0) + (Int(secondNumber) ?? 0)
+        case "-":
+            result = (Int(firstNumber) ?? 0) - (Int(secondNumber) ?? 0)
+        case "*":
+            result = (Int(firstNumber) ?? 0) * (Int(secondNumber) ?? 0)
+        case "/":
+            result = (Int(firstNumber) ?? 0) / (Int(secondNumber) ?? 0)
+        default:
+            print("Test")
+        }
+        
+        return result
     }
 }
 
