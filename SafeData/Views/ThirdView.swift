@@ -28,7 +28,7 @@ struct ThirdView: View {
                     }
                 }
                 .onDelete { index in
-                    manager.ourFiles.remove(atOffsets: index)
+                    manager.deleteFile(at: index)
                 }
             }
             .navigationTitle("File Manager")

@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import SwiftUI
 
 //  FileManager - системный объект, который может создавать папки, перемещать, копировать, или удалять файлы
 
@@ -58,5 +58,22 @@ class FileStorageManager: ObservableObject {
         } catch {
             print(error.localizedDescription)
         }
+    }
+    
+    func deleteFile(at offsets: IndexSet) {
+        //  Проходим по индексам
+        offsets.forEach { index in
+            //  Берём нужный нам файл
+            let file = ourFiles[index]
+            
+            do {
+                //  Удаляем файл физически
+                try FileManager.default.removeItem(at: file.url)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        //  После того, как наш объект удалён физически, мы удаляем элемент из массива
+        ourFiles.remove(atOffsets: offsets)
     }
 }
