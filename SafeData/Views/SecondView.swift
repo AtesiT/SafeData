@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SecondView: View {
+    @State private var showThirdView = false
     @State private var message = ""
     //  Flexible - позволяет занять колонкам столько места, сколько нужно будет. Но с учётом того, что колонок всего 4 будет.
     let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 4)
@@ -13,25 +14,30 @@ struct SecondView: View {
     ]
     
     var body: some View {
-        VStack {
-            UIKitLabel(text: message, color: .black, size: 40)
-            
-            //  Для оставления пространства между кнопками и label
-            Spacer()
-            
-            //  Lazy - позволяет в данном случае сэкономить ресурсы, так как будет отрисовывать только те элементы, которые в пределах экрана.
-            //  Ставим spacing между рядами (сверху снизу)
-            LazyVGrid(columns: columns, spacing: 8) {
-                //  Расставляем каждую кнопку с помощью цикла
-                ForEach(buttons, id: \.self) { button in
-                    UIKitButton(text: button, size: 40) {
-                        tapOnButton(button)
-                    }
+        NavigationStack {
+            VStack {
+                UIKitLabel(text: message, color: .black, size: 40)
+                
+                //  Для оставления пространства между кнопками и label
+                Spacer()
+                
+                //  Lazy - позволяет в данном случае сэкономить ресурсы, так как будет отрисовывать только те элементы, которые в пределах экрана.
+                //  Ставим spacing между рядами (сверху снизу)
+                LazyVGrid(columns: columns, spacing: 8) {
+                    //  Расставляем каждую кнопку с помощью цикла
+                    ForEach(buttons, id: \.self) { button in
+                        UIKitButton(text: button, size: 40) {
+                            tapOnButton(button)
+                        }
                         //  Делаем кнопки квадратной формы
                         .aspectRatio(1, contentMode: .fit)
+                    }
                 }
+                .padding()
             }
-            .padding()
+            .navigationDestination(isPresented: $showThirdView) {
+                ThirdView()
+            }
         }
     }
     
@@ -88,7 +94,6 @@ struct SecondView: View {
             }
         }
         
-        
         switch action {
         case "+":
             result = (Int(firstNumber) ?? 0) + (Int(secondNumber) ?? 0)
@@ -100,6 +105,11 @@ struct SecondView: View {
             result = (Int(firstNumber) ?? 0) / (Int(secondNumber) ?? 0)
         default:
             print("Test")
+        }
+        
+        //  Secret code to move on ThirdView
+        if result == 1234 {
+            showThirdView = true
         }
         
         return result
