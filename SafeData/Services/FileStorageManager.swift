@@ -15,6 +15,23 @@ class FileStorageManager: ObservableObject {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     }
     
+    init() {
+        loadFiles()
+    }
+    
+    func loadFiles() {
+        do {
+            //  Получаем список всех URL к нашим файлам
+            let urlWithContent = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
+            //  Конвертирование URL системных файлов в объекты AppFile
+            self.ourFiles = urlWithContent.map { url in
+                AppFile(name: url.lastPathComponent, url: url)
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
     func saveFile(from sourceURL: URL) {
         //  sourceURL - хранит путь к файлу, что был выбран
         //  lastPathComponent - имя файда с расширением
