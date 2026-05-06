@@ -8,9 +8,10 @@ struct SafeDataApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ThirdView()
             //  Environment - передача данных потомкам (вместо того, чтобы вручную в каждом файле прописывать доступ к БД)
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            //  TODO: - BACK LATER THE BOTTOM LINE (AFTER BACK CONTENTVIEW BACK)
+//                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }
