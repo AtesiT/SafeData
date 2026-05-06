@@ -27,6 +27,9 @@ struct ThirdView: View {
                         }
                     }
                 }
+                .onDelete { index in
+                    manager.ourFiles.remove(atOffsets: index)
+                }
             }
             .navigationTitle("File Manager")
             .toolbar {
