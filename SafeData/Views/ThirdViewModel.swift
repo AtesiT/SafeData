@@ -3,13 +3,15 @@ import Combine
 
 class ThirdViewModel: ObservableObject {
     //  Менеджер сохранения файлов
-    @StateObject var manager = FileStorageManager()
+    @Published var manager = FileStorageManager()
     //  Показывать окно импорта файлов
-    @State var showImportWindow = false
+    @Published var showImportWindow = false
     //  Доступ к списку файлов
     var ourFiles: [AppFile] {
         manager.ourFiles
     }
+    
+    init() {}
     
     func fileImport(result: Result<[URL], Error>) {
         switch result {
