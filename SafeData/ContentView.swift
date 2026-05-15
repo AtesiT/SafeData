@@ -9,6 +9,7 @@ struct ContentView: View {
     //  Переключатель для того, чтобы перейти на какой-либо из экранов
     @State private var showSecondView: Bool = false
     @State private var showDeleteView: Bool = false
+    @State private var showEditView: Bool = false
     //  Переключатель для показа alert и сообщение для показа в alert
     @State private var showAlert: Bool = false
     @State private var showAlertMessage: String = ""
@@ -68,6 +69,9 @@ struct ContentView: View {
                     Button("Перейти на экран удаления") {
                         deleteUser()
                     }
+                    Button("Перейти на экран изменения") {
+                        editUser()
+                    }
                 }
                 .padding(8)
                 .alert("Ошибка", isPresented: $showAlert) {
@@ -81,6 +85,9 @@ struct ContentView: View {
                 }
                 .navigationDestination(isPresented: $showDeleteView) {
                     DeleteView()
+                }
+                .navigationDestination(isPresented: $showEditView) {
+                    EditView()
                 }
             }
             .onAppear {
@@ -163,6 +170,10 @@ extension ContentView {
     //  Для перехода на экран удаления
     private func deleteUser() {
         showDeleteView = true
+    }
+    //  Для перезода на экран редактирования пользователя
+    private func editUser() {
+        showEditView = true
     }
 }
 
