@@ -6,8 +6,9 @@ import CoreData
 struct ContentView: View {
     //  Создаём свойство для того, чтобы получить доступ к базе данным
     @Environment(\.managedObjectContext) private var viewContext
-    //  Переключатель для того, чтобы перейти на второй экран
+    //  Переключатель для того, чтобы перейти на какой-либо из экранов
     @State private var showSecondView: Bool = false
+    @State private var showDeleteView: Bool = false
     //  Переключатель для показа alert и сообщение для показа в alert
     @State private var showAlert: Bool = false
     @State private var showAlertMessage: String = ""
@@ -63,6 +64,10 @@ struct ContentView: View {
                         signUp()
                     }
                     .disabled(inputUsername.isEmpty || inputPassword.isEmpty)
+                    
+                    Button("Перейти на экран удаления") {
+                        deleteUser()
+                    }
                 }
                 .padding(8)
                 .alert("Ошибка", isPresented: $showAlert) {
@@ -73,6 +78,9 @@ struct ContentView: View {
                 //  Добавляем переход на второй экран
                 .navigationDestination(isPresented: $showSecondView) {
                     SecondView()
+                }
+                .navigationDestination(isPresented: $showDeleteView) {
+                    DeleteView()
                 }
             }
             .onAppear {
@@ -151,6 +159,10 @@ extension ContentView {
             showAlertMessage = "Такой пользователь уже существует"
             showAlert = true
         }
+    }
+    //  Для перехода на экран удаления
+    private func deleteUser() {
+        showDeleteView = true
     }
 }
 
