@@ -4,14 +4,13 @@ import CoreData
 struct DeleteView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
-    @State private var inputUsername: String = ""
-    @State private var inputPassword: String = ""
-    
+    @StateObject private var viewModel = DeleteViewModel()
+        
     var body: some View {
         VStack(spacing: 15) {
             Text("Удаление аккаунта")
-            TextField("Введите имя пользователя", text: $inputUsername)
-            TextField("Введите пароль", text: $inputPassword)
+            TextField("Введите имя пользователя", text: $viewModel.inputUsername)
+            SecureField("Введите пароль", text: $viewModel.inputPassword)
             Button("Удалить аккаунт") {
                 deleteUser()
             }
@@ -22,8 +21,8 @@ struct DeleteView: View {
 extension DeleteView {
     func deleteUser() {
         //  Присваиваем переменные
-        let correctUsername = inputUsername.trimmingCharacters(in: .whitespaces)
-        let correctPassword = hashInfo(inputPassword.trimmingCharacters(in: .whitespaces))
+        let correctUsername = viewModel.inputUsername.trimmingCharacters(in: .whitespaces)
+        let correctPassword = hashInfo(viewModel.inputPassword.trimmingCharacters(in: .whitespaces))
         
         //  Создаём запрос к базе данных в Entity по названию "User"
         let request = NSFetchRequest<User>(entityName: "User")
