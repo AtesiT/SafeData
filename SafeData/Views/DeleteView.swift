@@ -4,7 +4,12 @@ import CoreData
 struct DeleteView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
-    @StateObject private var viewModel = DeleteViewModel()
+    //  Передаем с помощью init, так как до этого в момент инициализации переменная будет nil
+    @StateObject private var viewModel: DeleteViewModel
+    
+    init() {
+        _viewModel = StateObject(wrappedValue: DeleteViewModel(viewContext: PersistenceController.shared.container.viewContext))
+    }
         
     var body: some View {
         VStack(spacing: 15) {
@@ -12,38 +17,13 @@ struct DeleteView: View {
             TextField("Введите имя пользователя", text: $viewModel.inputUsername)
             SecureField("Введите пароль", text: $viewModel.inputPassword)
             Button("Удалить аккаунт") {
-                deleteUser()
+                viewModel.deleteUser()
             }
         }
-    }
-}
-
-extension DeleteView {
-    func deleteUser() {
-        //  Присваиваем переменные
-        let correctUsername = viewModel.inputUsername.trimmingCharacters(in: .whitespaces)
-        let correctPassword = hashInfo(viewModel.inputPassword.trimmingCharacters(in: .whitespaces))
-        
-        //  Создаём запрос к базе данных в Entity по названию "User"
-        let request = NSFetchRequest<User>(entityName: "User")
-        
-        //  Отфильтровываем по условию
-        request.predicate = NSPredicate(format: "username == %@ AND password == %@", correctUsername, correctPassword)
-        
-        //  Примваиваем данные (если были) в result
-        let result = (try? viewContext.fetch(request)) ?? []
-        
-        if let theUser = result.first {
-            viewContext.delete(theUser)
-            
-            do {
-                try viewContext.save()
-                print("Пользователь был удалён")
-            } catch {
-                print(error.localizedDescription)
-            }
-        } else {
-            print("Такого пользователя не существует")
+        .alert("Вывод", isPresented: $viewModel.showAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(viewModel.alertMessage)
         }
     }
 }
