@@ -37,9 +37,8 @@ struct ContentView: View {
                         Image(systemName: "person.crop.circle")
                             .foregroundStyle(Color.gray)
                         TextField("Введите имя пользователя", text: $inputUsername)
-                            .textFieldStyle(.roundedBorder)
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.never)
+                            .textFieldModifier(width: 320)
+                            
                     }
                     .padding(.horizontal, 64)
                     
@@ -47,7 +46,7 @@ struct ContentView: View {
                         Image(systemName: "lock.fill")
                             .foregroundStyle(Color.gray)
                         SecureField("Введите пароль", text: $inputPassword)
-                            .textFieldStyle(.roundedBorder)
+                            .secureFieldModifier(width: 320)
                         
                     }
                     .padding(.horizontal, 64)

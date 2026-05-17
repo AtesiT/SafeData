@@ -15,7 +15,9 @@ struct DeleteView: View {
         VStack(spacing: 15) {
             Text("Удаление аккаунта")
             TextField("Введите имя пользователя", text: $viewModel.inputUsername)
+                .textFieldModifier(width: 320)
             SecureField("Введите пароль", text: $viewModel.inputPassword)
+                .secureFieldModifier(width: 320)
             Button("Удалить аккаунт") {
                 viewModel.deleteUser()
             }

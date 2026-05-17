@@ -15,12 +15,16 @@ struct EditView: View {
             Text("Старые данные")
             VStack {
                 TextField("Введите имя", text: $viewModel.inputUsername)
+                    .textFieldModifier(width: 320)
                 SecureField("Введите пароль", text: $viewModel.inputPassword)
+                    .secureFieldModifier(width: 320)
             }
             Text("Новые данные")
             VStack {
                 TextField("Введите новое имя", text: $viewModel.newUsername)
+                    .textFieldModifier(width: 320)
                 SecureField("Введите новый пароль", text: $viewModel.newPassword)
+                    .secureFieldModifier(width: 320)
             }
             Button("Изменить данные") {
                 viewModel.editUser()
